@@ -1,0 +1,93 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                                       The Legend EA MT4|
+//|                                        https://www.forexroboteasy.com|
+//|                                             Forex Robot Easy Team|
+//+------------------------------------------------------------------+
+
+//--- Include necessary libraries
+#include <Trade\Trade.mqh>
+
+//--- Declare global variables
+CTrade trade;
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|                   Expert initialization function                  |
+//|                                                                  |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+   //--- Initialize trade
+   trade.Init(Symbol());
+
+   //--- Set trade parameters
+   trade.SetExpertMagicNumber(123456);
+   trade.SetStopLoss(50);
+   trade.SetTakeProfit(100);
+   trade.SetMaxLoss(500);
+   trade.SetRiskRewardRatio(2.0);
+
+   return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|                     Expert main function                          |
+//|                                                                  |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+   //--- Get current market price
+   double price = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+
+   //--- Analyze price data and generate trade signals
+   bool buySignal = CheckBuySignal(price);
+   bool sellSignal = CheckSellSignal(price);
+
+   //--- Execute buy/sell orders
+   if(buySignal)
+   {
+      trade.Buy(0.1);
+   }
+   else if(sellSignal)
+   {
+      trade.Sell(0.1);
+   }
+
+   //--- Monitor open trades and adjust positions
+   trade.MonitorTrades();
+
+   //--- Generate trade performance report
+   double winLossRatio = trade.GetWinLossRatio();
+   double profitability = trade.GetProfitability();
+   double drawdown = trade.GetDrawdown();
+   GenerateReport(winLossRatio, profitability, drawdown);
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|                         Helper functions                          |
+//|                                                                  |
+//+------------------------------------------------------------------+
+bool CheckBuySignal(double price)
+{
+   //--- Add logic to analyze price data and generate buy signal
+   return (price > 1.0);
+}
+
+bool CheckSellSignal(double price)
+{
+   //--- Add logic to analyze price data and generate sell signal
+   return (price < 1.0);
+}
+
+void GenerateReport(double winLossRatio, double profitability, double drawdown)
+{
+   //--- Add logic to generate trade performance report
+   Print('Win/Loss Ratio: ', winLossRatio);
+   Print('Profitability: ', profitability);
+   Print('Drawdown: ', drawdown);
+}
+
+//+------------------------------------------------------------------+
